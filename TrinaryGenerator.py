@@ -206,13 +206,12 @@ def CharaZ():
 
 #print("Please enter what you would like Ciphered with each letter separated with a space:")
 #Translate = input(">>> ").upper().split()
-Translate = input("Please enter what you would like Ciphered with each letter separated with a space: ").upper().split()
-print(Translate)
-TransLen = len(Translate)
-print(TransLen)
+print("Please enter what you would like Ciphered: ")
+Translate = input(">>> ").upper()
+Translate = list(Translate)
 Setup()
 Start2()
-for i in range(TransLen):
+for i in range(len(Translate)):
     x = Translate.pop(0)
     if x == "-":
         CharSp()
@@ -295,8 +294,8 @@ for i in range(TransLen):
     elif x == "Z":
         CharaZ()
 
-    if i != TransLen - 1:
+    if i != len(Translate) - 1:
         Next()
-print("All done!")
+print("All done! Please click on glyph to close.")
 
 exitonclick()
