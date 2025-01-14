@@ -1,18 +1,22 @@
+# import graphic depictor
 from turtle import *
 
 #----------
 
+# preset turtle so it looks nice
 def Setup():
     mode("logo")
     hideturtle()
     width(2)
 
+# create a shorthand for a Pixel
 def Pixel():
     down()
     forward(1)
     backward(1)
     up()
 
+# make a nice starting arrow with pixels rather than stamps
 def Start():
     Pixel()
     bk(4)
@@ -35,30 +39,36 @@ def Start():
     home()
     down()
 
+# make a starting arrow with a stamps
 def Start2():
     pensize(5)
     shape("arrow")
     left(90)
     stamp()
 
+# make a shorthand for the arrows in between letters, to show which direction the node is facing
 def Next():
     forward(10)
     shape("arrow")
     stamp()
+    backward(10)
 
 #----------
 
+# create the default (0) movement of forward with a node
 def Zero():
     forward(50)
     shape("square")
     stamp()
 
+# create the first (1) movement of left with a node
 def One():
     left(90)
     forward(50)
     shape("square")
     stamp()
 
+# create the second (2) movement of right with a node
 def Two():
     right(90)
     forward(50)
@@ -66,6 +76,8 @@ def Two():
     stamp()
 
 #----------
+
+# create a library for the letters, each being 0-26 in trinary with three places
 
 def CharSp():
     Zero()
@@ -204,98 +216,112 @@ def CharaZ():
 
 #----------
 
-#print("Please enter what you would like Ciphered with each letter separated with a space:")
-#Translate = input(">>> ").upper().split()
+# ask for and recieve input on what is to be translated, and make it upper case for convenience
 print("Please enter what you would like Ciphered: ")
 Translate = input(">>> ").upper()
+
+# turn input string into a list to be able to walk through it and output text
 Translate = list(Translate)
+
+# set up turtle visually
 Setup()
-Start2()
+Start()
+
+# main loop that goes through each letter comparing the input to the library
 for i in range(len(Translate)):
+
+    # pulls out the first item of the list to compare, then discards
     x = Translate.pop(0)
-    if x == "-":
+
+    # library again basically
+
+    if x == " ":
         CharSp()
 
-    elif x == "A":
+    if x == "A":
         CharaA()
 
-    elif x == "B":
+    if x == "B":
         CharaB()
 
-    elif x == "C":
+    if x == "C":
         CharaC()
 
-    elif x == "D":
+    if x == "D":
         CharaD()
 
-    elif x == "E":
+    if x == "E":
         CharaE()
 
-    elif x == "F":
+    if x == "F":
         CharaF()
 
-    elif x == "G":
+    if x == "G":
         CharaG()
 
-    elif x == "H":
+    if x == "H":
         CharaH()
 
-    elif x == "I":
+    if x == "I":
         CharaI()
 
-    elif x == "J":
+    if x == "J":
         CharaJ()
 
-    elif x == "K":
+    if x == "K":
         CharaK()
 
-    elif x == "L":
+    if x == "L":
         CharaL()
 
-    elif x == "M":
+    if x == "M":
         CharaM()
 
-    elif x == "N":
+    if x == "N":
         CharaN()
 
-    elif x == "O":
+    if x == "O":
         CharaO()
 
-    elif x == "P":
+    if x == "P":
         CharaP()
 
-    elif x == "Q":
+    if x == "Q":
         CharaQ()
 
-    elif x == "R":
+    if x == "R":
         CharaR()
 
-    elif x == "S":
+    if x == "S":
         CharaS()
 
-    elif x == "T":
+    if x == "T":
         CharaT()
 
-    elif x == "U":
+    if x == "U":
         CharaU()
 
-    elif x == "V":
+    if x == "V":
         CharaV()
 
-    elif x == "W":
+    if x == "W":
         CharaW()
 
-    elif x == "Y":
+    if x == "Y":
         CharaY()
 
-    elif x == "X":
+    if x == "X":
         CharaX()
 
-    elif x == "Z":
+    if x == "Z":
         CharaZ()
 
-    if i != len(Translate) - 1:
+    # checks for the last letter and then stamps the connecting arrow as appropriate
+    if len(Translate) != 0:
         Next()
+
+# All Done!
 print("All done! Please click on glyph to close.")
 
+# Goodbye!
 exitonclick()
