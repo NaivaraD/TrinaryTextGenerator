@@ -79,140 +79,9 @@ def Two():
 
 # create a library for the letters, each being 0-26 in trinary with three places
 
-def CharSp():
-    Zero()
-    Zero()
-    Zero()
-
-def CharaA():
-    Zero()
-    Zero()
-    One()
-
-def CharaB():
-    Zero()
-    Zero()
-    Two()
-
-def CharaC():
-    Zero()
-    One()
-    Zero()
-
-def CharaD():
-    Zero()
-    One()
-    One()
-
-def CharaE():
-    Zero()
-    One()
-    Two()
-
-def CharaF():
-    Zero()
-    Two()
-    Zero()
-
-def CharaG():
-    Zero()
-    Two()
-    One()
-
-def CharaH():
-    Zero()
-    Two()
-    Two()
-
-def CharaI():
-    One()
-    Zero()
-    Zero()
-
-def CharaJ():
-    One()
-    Zero()
-    One()
-
-def CharaK():
-    One()
-    Zero()
-    Two()
-
-def CharaL():
-    One()
-    One()
-    Zero()
-
-def CharaM():
-    One()
-    One()
-    One()
-
-def CharaN():
-    One()
-    One()
-    Two()
-
-def CharaO():
-    One()
-    Two()
-    Zero()
-
-def CharaP():
-    One()
-    Two()
-    One()
-
-def CharaQ():
-    One()
-    Two()
-    Two()
-
-def CharaR():
-    Two()
-    Zero()
-    Zero()
-
-def CharaS():
-    Two()
-    Zero()
-    One()
-
-def CharaT():
-    Two()
-    Zero()
-    Two()
-
-def CharaU():
-    Two()
-    One()
-    Zero()
-
-def CharaV():
-    Two()
-    One()
-    One()
-
-def CharaW():
-    Two()
-    One()
-    Two()
-
-def CharaX():
-    Two()
-    Two()
-    Zero()
-
-def CharaY():
-    Two()
-    Two()
-    One()
-
-def CharaZ():
-    Two()
-    Two()
-    Two()
+library = {' ': '000', 'A': '001', 'B': '002', 'C': '010', 'D': '011', 'E': '012', 'F': '020', 'G': '021', 'H': '022',
+            'I': '100', 'J': '101', 'K': '102', 'L': '110', 'M': '111', 'N': '112', 'O': '120', 'P': '121', 'Q': '122',
+            'R': '200', 'S': '201', 'T': '202', 'U': '210', 'V': '211', 'W': '212', 'X': '220', 'Y': '221', 'Z': '222'}
 
 #----------
 
@@ -233,88 +102,27 @@ for i in range(len(Translate)):
     # pulls out the first item of the list to compare, then discards
     x = Translate.pop(0)
 
-    # library again basically
+    # checking if the current letter is in the library
+    if x in library:
 
-    if x == " ":
-        CharSp()
+        # puts that letter in a variable
+        currentLetter = list(library[x])
 
-    if x == "A":
-        CharaA()
+        # makes a list out of the letters trinary
+        for y in range(len(currentLetter)):
+            # pulls out the first item of the list to compare, then discards
+            currentNumber = currentLetter.pop(0)
 
-    if x == "B":
-        CharaB()
+            # draws the node direction of the letters trinary
 
-    if x == "C":
-        CharaC()
+            if currentNumber == '0':
+                Zero()
 
-    if x == "D":
-        CharaD()
+            if currentNumber == '1':
+                One()
 
-    if x == "E":
-        CharaE()
-
-    if x == "F":
-        CharaF()
-
-    if x == "G":
-        CharaG()
-
-    if x == "H":
-        CharaH()
-
-    if x == "I":
-        CharaI()
-
-    if x == "J":
-        CharaJ()
-
-    if x == "K":
-        CharaK()
-
-    if x == "L":
-        CharaL()
-
-    if x == "M":
-        CharaM()
-
-    if x == "N":
-        CharaN()
-
-    if x == "O":
-        CharaO()
-
-    if x == "P":
-        CharaP()
-
-    if x == "Q":
-        CharaQ()
-
-    if x == "R":
-        CharaR()
-
-    if x == "S":
-        CharaS()
-
-    if x == "T":
-        CharaT()
-
-    if x == "U":
-        CharaU()
-
-    if x == "V":
-        CharaV()
-
-    if x == "W":
-        CharaW()
-
-    if x == "Y":
-        CharaY()
-
-    if x == "X":
-        CharaX()
-
-    if x == "Z":
-        CharaZ()
+            if currentNumber == '2':
+                Two()
 
     # checks for the last letter and then stamps the connecting arrow as appropriate
     if len(Translate) != 0:
