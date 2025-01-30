@@ -17,14 +17,14 @@ def start():
     fd(5)
 
 # make a shorthand for the arrows in between letters, to show which direction the node is facing
-def next():
+def letterNext():
     fd(10)
     shape("arrow")
     stamp()
     bk(10)
 
 # make an arrow embedded in the squares so it looks smaller, with intent to increase legibility
-def nodeDir():
+def nodeNext():
     fd(5)
     shape("arrow")
     stamp()
@@ -34,32 +34,23 @@ def nodeDir():
 
 # create the default (0) movement of forward with a node
 def zero(distance):
-    fd(4)
-    down()
     fd(distance*30)
     shape("square")
     stamp()
-    nodeDir()
 
 # create the first (1) movement of left with a node
 def one(distance):
     lt(90)
-    fd(3)
-    down()
     fd(distance*30)
     shape("square")
     stamp()
-    nodeDir()
 
 # create the second (2) movement of right with a node
 def two(distance):
     rt(90)
-    fd(3)
-    down()
     fd(distance*30)
     shape("square")
     stamp()
-    nodeDir()
 
 #----------
 
@@ -71,51 +62,49 @@ library = { ' ': '000', 'A': '001', 'B': '002', 'C': '010', 'D': '011', 'E': '01
 
 #----------
 
-# ask for and recieve input on what is to be translated, and make it upper case for convenience
+# ask for and recieve input as a list on what is to be ciphered, and make it upper case for convenience
 print("Please enter what you would like Ciphered:")
-translate = input(">>> ").upper()
-
-# turn input string into a list to be able to walk through it and output text
-translate = list(translate)
+translate = list(input(">>> ").upper())
 
 # set up turtle visually
 setup()
 start()
 
 dist = 1
+coOrdsList = []
 
 # main loop that goes through each letter comparing the input to the library
 for i in range(len(translate)):
 
-    # grabs the each item in the list in turn to compare
-    x = translate[i]
+    # puts that letter in a variable
+    currentLetter = list(library[translate[i]])
 
-    # checking if the current letter is in the library
-    if x in library:
+    # makes a list out of the letters trinary
+    for y in range(len(currentLetter)):
+        
+        # draws the node direction of the letters trinary
 
-        # puts that letter in a variable
-        currentLetter = list(library[x])
+        if currentLetter[y] == '0':
+            zero(dist)
 
-        # makes a list out of the letters trinary
-        for y in range(len(currentLetter)):
-            
-            # grabs the each item in the list in turn to compare
-            currentNumber = currentLetter[y]
+        elif currentLetter[y] == '1':
+            one(dist)
 
-            # draws the node direction of the letters trinary
+        elif currentLetter[y] == '2':
+            two(dist)
 
-            if currentNumber == '0':
-                zero(dist)
+        if y != len(currentLetter) - 1:
+            nodeNext()
 
-            elif currentNumber == '1':
-                one(dist)
+        # make a list of all the coordinates of the nodes
+        #coOrdsList.append([int(xcor()), int(ycor())])
 
-            elif currentNumber == '2':
-                two(dist)
+        # print the last added item in coOrdsList
+        #print(coOrdsList[len(coOrdsList) - 1])
 
     # checks for the last letter and then stamps the connecting arrow as appropriate
     if i != len(translate) - 1:
-        next()
+        letterNext()
 
 # All Done!
 print("All done! Please click on glyph to close.")
