@@ -24,47 +24,32 @@ startY = 0
 mindist = 30
 dist = 1
 coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir}]
+move = {north: (0, 1), east: (1, 0), south: (0, -1), west: (-1, 0)}
+leftTurn = {north: west, east: north, south: east, west: south}
+rightTurn = {north: east, east: south, south: west, west: north}
 
 #----------
 
+def addCoOrd(distance, direction, dx, dy):
+    coOrdsList.append({
+        'x': coOrdsList[-1]['x'] + dx * distance * mindist,
+        'y': coOrdsList[-1]['y'] + dy * distance * mindist,
+        'dir': direction
+    })
+
 def zero(distance, direction):
-    if direction == north:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']+distance*mindist, 'dir': north})
-
-    if direction == west:
-        coOrdsList.append({'x': coOrdsList[-1]['x']-distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': west})
-
-    if direction == south:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']-distance*mindist, 'dir': south})
-
-    if direction == east:
-        coOrdsList.append({'x': coOrdsList[-1]['x']+distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': east})
+    dx, dy = move[direction]
+    addCoOrd(distance, direction, dx, dy)
 
 def one(distance, direction):
-    if direction == north:
-        coOrdsList.append({'x': coOrdsList[-1]['x']-distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': west})
-
-    if direction == west:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']-distance*mindist, 'dir': south})
-
-    if direction == south:
-        coOrdsList.append({'x': coOrdsList[-1]['x']+distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': east})
-
-    if direction == east:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']+distance*mindist, 'dir': north})
+    direction = leftTurn[direction]
+    dx, dy = move[direction]
+    addCoOrd(distance, direction, dx, dy)
 
 def two(distance, direction):
-    if direction == north:
-        coOrdsList.append({'x': coOrdsList[-1]['x']+distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': east})
-
-    if direction == west:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']+distance*mindist, 'dir': north})
-
-    if direction == south:
-        coOrdsList.append({'x': coOrdsList[-1]['x']-distance*mindist, 'y': coOrdsList[-1]['y'], 'dir': west})
-
-    if direction == east:
-        coOrdsList.append({'x': coOrdsList[-1]['x'], 'y': coOrdsList[-1]['y']-distance*mindist, 'dir': south})
+    direction = rightTurn[direction]
+    dx, dy = move[direction]
+    addCoOrd(distance, direction, dx, dy)
 
 #----------
 
@@ -110,7 +95,6 @@ def setup():
 
 # make a starting arrow with a stamps
 def start():
-    lt(270)
     bk(5)
     shape('arrow')
     stamp()
@@ -131,3 +115,23 @@ def nodeNext():
     bk(5)
 
 #----------
+
+setup()
+start()
+
+for i in range(len(coOrdsList)):
+    goto(x = coOrdsList[i]['x'], y = coOrdsList[i]['y'])
+    setheading(coOrdsList[i]['dir'])
+
+    if i != len(coOrdsList) - len(coOrdsList):
+        shape('square')
+        stamp()
+
+    if i != len(coOrdsList) - 1 and i != len(coOrdsList) - len(coOrdsList):
+        nodeNext()
+
+    if i == round(len(translate) - 1 // 3):
+        letterNext()
+
+# Goodbye!
+exitonclick()
