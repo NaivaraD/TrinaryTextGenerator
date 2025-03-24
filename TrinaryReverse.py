@@ -1,3 +1,4 @@
+from turtle import *
 
 # create a dictionary for the letters, each being 0-26 in trinary with three places
 library = {
@@ -98,3 +99,35 @@ for i in range(len(translate)):
         print(coOrdsList[len(coOrdsList) - 1])
 
 print(coOrdsList)
+
+#----------
+
+# preset turtle so it looks nice
+def setup():
+    mode('logo')
+    hideturtle()
+    width(2)
+
+# make a starting arrow with a stamps
+def start():
+    lt(270)
+    bk(5)
+    shape('arrow')
+    stamp()
+    fd(5)
+
+# make a shorthand for the arrows in between letters, to show which direction the node is facing
+def letterNext():
+    fd(10)
+    shape('arrow')
+    stamp()
+    bk(10)
+
+# make an arrow embedded in the squares so it looks smaller, with intent to increase legibility
+def nodeNext():
+    fd(5)
+    shape('arrow')
+    stamp()
+    bk(5)
+
+#----------
