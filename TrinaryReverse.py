@@ -13,29 +13,34 @@ library = {
     'X': [2,2,0], 'Y': [2,2,1], 'Z': [2,2,2]
     }
 
+# python directional numbers as compass variables
 north = 0
 east = 90
 south = 180
 west = 270
 
+# dictionaries to make moving forward, left, and right easier
 move = {north: (0, 1), east: (1, 0), south: (0, -1), west: (-1, 0)}
 leftTurn = {north: west, east: north, south: east, west: south}
 rightTurn = {north: east, east: south, south: west, west: north}
 
+# dictionary to store what will be function calls as numbers
 coOrdStamp = {0: 'start', 1: 'square', 2: 'nodeNext', 3: 'letterNext'}
 
+# distances as variables
+mindist = 30
+dist = 1
+
+# setup variables
 startDir = north
 startX = 0
 startY = 0
 startStamp = 0
-
-mindist = 30
-dist = 1
-
 coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir, 'stamp': startStamp}]
 
 #----------
 
+# func to add coOrds to the list
 def addCoOrd(distance, direction, dx, dy):
     coOrdsList.append({
         'x': coOrdsList[-1]['x'] + dx * distance * mindist,
@@ -43,15 +48,18 @@ def addCoOrd(distance, direction, dx, dy):
         'dir': direction
     })
 
+# func to move forward
 def zero(distance, direction):
     dx, dy = move[direction]
     addCoOrd(distance, direction, dx, dy)
 
+# func to move and turn left
 def one(distance, direction):
     direction = leftTurn[direction]
     dx, dy = move[direction]
     addCoOrd(distance, direction, dx, dy)
 
+# func to move and turn right
 def two(distance, direction):
     direction = rightTurn[direction]
     dx, dy = move[direction]
@@ -70,6 +78,7 @@ def start():
     stamp()
     fd(5)
 
+# square stamp
 def square():
     shape('square')
     stamp()
@@ -95,11 +104,11 @@ def nodeNext():
 # create a dictionary for the directional functions
 directionLib = {0: zero, 1: one, 2: two}
 
-
+# ask what the user wants and put it in a variable
 print('Please enter what you would like Ciphered:')
 translate = list(input('>>> ').upper())
 
-# main loop that goes through each letter comparing the input to the library
+# main loop 1 that goes through each letter comparing the input to the library
 for i in range(len(translate)):
 
     # puts that letter in a variable
@@ -111,49 +120,48 @@ for i in range(len(translate)):
         # draws the node direction of the letters trinary
         directionLib[currentLetter[currentNode]](dist, coOrdsList[-1]['dir'])
 
+        # checks if current node is in the middle of a letter and adds var for tiny arrow
         if currentNode != len(currentLetter) - 1:
             coOrdsList[-1]['stamp'] = 2
 
+        # var initialized
         overLapTest = 0
 
+        # loop to check if any nodes are over lapping
         for overLap in range(len(coOrdsList)-1):
-
+            # checks if x and y of current node is the same as any previous and changes var appropriately
             if coOrdsList[-1]['x'] == coOrdsList[overLap]['x'] and coOrdsList[-1]['y'] == coOrdsList[overLap]['y']:
                 overLapTest = 1
 
+            # adds overlap var to node index
             coOrdsList[-1]['over'] = overLapTest
 
         # print the last added item in coOrdsList
         print(coOrdsList[len(coOrdsList) - 1])
-
+    
+    # checks if current node is at the end of a letter and adds var for large arrow
     if i != len(translate) - 1:
         coOrdsList[-1]['stamp'] = 3
 
+    # checks if current node is at the end and adds var for a square
     if i == len(translate) - 1:
         coOrdsList[-1]['stamp'] = 1
 
+# print full coOrdsList
 print(coOrdsList)
 
 #----------
 
+# dictionary to actually call stamp funcs
 funcStamp = {'start': start, 'square': square, 'nodeNext': nodeNext, 'letterNext': letterNext}
 
 setup()
-#start()
 
+# main loop 2 that walks through the coOrdsList and puts the turtle in the correct location, in the correct direction, and puts a stamp down
 for i in range(len(coOrdsList)):
     goto(x = coOrdsList[i]['x'], y = coOrdsList[i]['y'])
     setheading(coOrdsList[i]['dir'])
-
     funcStamp[coOrdStamp[coOrdsList[i]['stamp']]]()
-    
-    '''coOrdsList[i]['stamp']'''
-
-    '''if i != len(coOrdsList) - 1 and i != len(coOrdsList) - len(coOrdsList):
-        nodeNext()'''
-
-    '''if i == round(len(translate) - 1 // 3):
-        letterNext()'''
 
 # Goodbye!
 exitonclick()
