@@ -18,15 +18,21 @@ east = 90
 south = 180
 west = 270
 
-startDir = north
-startX = 0
-startY = 0
-mindist = 30
-dist = 1
-coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir}]
 move = {north: (0, 1), east: (1, 0), south: (0, -1), west: (-1, 0)}
 leftTurn = {north: west, east: north, south: east, west: south}
 rightTurn = {north: east, east: south, south: west, west: north}
+
+coOrdStamp = {0: 'start', 1: 'square', 2: 'nodeNext', 3: 'letterNext'}
+
+startDir = north
+startX = 0
+startY = 0
+startStamp = 0
+
+mindist = 30
+dist = 1
+
+coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir, 'stamp': startStamp}]
 
 #----------
 
@@ -51,10 +57,44 @@ def two(distance, direction):
     dx, dy = move[direction]
     addCoOrd(distance, direction, dx, dy)
 
+# preset turtle so it looks nice
+def setup():
+    mode('logo')
+    hideturtle()
+    width(2)
+
+# make a starting arrow with a stamps
+def start():
+    bk(5)
+    shape('arrow')
+    stamp()
+    fd(5)
+
+def square():
+    shape('square')
+    stamp()
+
+# make a shorthand for the arrows in between letters, to show which direction the node is facing
+def letterNext():
+    square()
+    fd(10)
+    shape('arrow')
+    stamp()
+    bk(10)
+
+# make an arrow embedded in the squares so it looks smaller, with intent to increase legibility
+def nodeNext():
+    square()
+    fd(5)
+    shape('arrow')
+    stamp()
+    bk(5)
+
 #----------
 
 # create a dictionary for the directional functions
 directionLib = {0: zero, 1: one, 2: two}
+
 
 print('Please enter what you would like Ciphered:')
 translate = list(input('>>> ').upper())
@@ -71,6 +111,9 @@ for i in range(len(translate)):
         # draws the node direction of the letters trinary
         directionLib[currentLetter[currentNode]](dist, coOrdsList[-1]['dir'])
 
+        if currentNode != len(currentLetter) - 1:
+            coOrdsList[-1]['stamp'] = 2
+
         overLapTest = 0
 
         for overLap in range(len(coOrdsList)-1):
@@ -83,55 +126,34 @@ for i in range(len(translate)):
         # print the last added item in coOrdsList
         print(coOrdsList[len(coOrdsList) - 1])
 
+    if i != len(translate) - 1:
+        coOrdsList[-1]['stamp'] = 3
+
+    if i == len(translate) - 1:
+        coOrdsList[-1]['stamp'] = 1
+
 print(coOrdsList)
 
 #----------
 
-# preset turtle so it looks nice
-def setup():
-    mode('logo')
-    hideturtle()
-    width(2)
-
-# make a starting arrow with a stamps
-def start():
-    bk(5)
-    shape('arrow')
-    stamp()
-    fd(5)
-
-# make a shorthand for the arrows in between letters, to show which direction the node is facing
-def letterNext():
-    fd(10)
-    shape('arrow')
-    stamp()
-    bk(10)
-
-# make an arrow embedded in the squares so it looks smaller, with intent to increase legibility
-def nodeNext():
-    fd(5)
-    shape('arrow')
-    stamp()
-    bk(5)
-
-#----------
+funcStamp = {'start': start, 'square': square, 'nodeNext': nodeNext, 'letterNext': letterNext}
 
 setup()
-start()
+#start()
 
 for i in range(len(coOrdsList)):
     goto(x = coOrdsList[i]['x'], y = coOrdsList[i]['y'])
     setheading(coOrdsList[i]['dir'])
 
-    if i != len(coOrdsList) - len(coOrdsList):
-        shape('square')
-        stamp()
+    funcStamp[coOrdStamp[coOrdsList[i]['stamp']]]()
+    
+    '''coOrdsList[i]['stamp']'''
 
-    if i != len(coOrdsList) - 1 and i != len(coOrdsList) - len(coOrdsList):
-        nodeNext()
+    '''if i != len(coOrdsList) - 1 and i != len(coOrdsList) - len(coOrdsList):
+        nodeNext()'''
 
-    if i == round(len(translate) - 1 // 3):
-        letterNext()
+    '''if i == round(len(translate) - 1 // 3):
+        letterNext()'''
 
 # Goodbye!
 exitonclick()
