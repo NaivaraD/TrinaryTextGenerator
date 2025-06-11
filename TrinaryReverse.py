@@ -14,15 +14,13 @@ library = {
     }
 
 # python directional numbers as compass variables
-north = 0
-east = 90
-south = 180
-west = 270
+north, east, south, west = 0, 90, 180, 270
 
-# dictionaries to make moving forward, left, and right easier
+# dictionaries to make moving forward, left, and right easier and to note backwards
 move = {north: (0, 1), east: (1, 0), south: (0, -1), west: (-1, 0)}
 leftTurn = {north: west, east: north, south: east, west: south}
 rightTurn = {north: east, east: south, south: west, west: north}
+reverse = {north: south, east: west, south: north, west: east}
 
 # dictionary to store what will be function calls as numbers
 coOrdStamp = {0: 'start', 1: 'square', 2: 'nodeNext', 3: 'letterNext'}
@@ -36,9 +34,9 @@ startDir = north
 startX = 0
 startY = 0
 startStamp = 0
-coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir, 'stamp': startStamp}]
+coOrdsList = [{'x': startX, 'y': startY, 'dir': startDir, 'stamp': startStamp, 'over': 0}]
 
-#----------
+#--------------------
 
 # func to add coOrds to the list
 def addCoOrd(distance, direction, dx, dy):
@@ -65,11 +63,39 @@ def two(distance, direction):
     dx, dy = move[direction]
     addCoOrd(distance, direction, dx, dy)
 
+def printCoOrds():
+    # print the coOrdsList
+    for i, e in enumerate(coOrdsList, 1):
+        print(i, e)
+
+def overlapTest():
+    overlap = 0
+
+    # loop to check if any nodes are overlapping
+    for test in range(len(coOrdsList)-1):
+        # checks if x and y of current node is the same as any previous and changes var appropriately
+        if coOrdsList[-1]['x'] == coOrdsList[test]['x'] and coOrdsList[-1]['y'] == coOrdsList[test]['y']:
+            overlap = 1
+
+        # adds overlap var to node index
+        coOrdsList[-1]['over'] = overlap
+
+def overlapFix(dist):
+    if coOrdsList[-1]['over'] == 1:
+        for y in range(len(coOrdsList)-1):
+            if coOrdsList[y]['dir'] == reverse[coOrdsList[len(coOrdsList)-1]['dir']]:
+                printCoOrds()
+                color('red')
+
+#----------
+
 # preset turtle so it looks nice
 def setup():
     mode('logo')
     hideturtle()
     width(2)
+    # puts turtle window on a different screen
+    #Screen().setup(startx = -2500)
 
 # make a starting arrow with a stamps
 def start():
@@ -99,14 +125,21 @@ def nodeNext():
     stamp()
     bk(5)
 
-#----------
+#--------------------
 
 # create a dictionary for the directional functions
 directionLib = {0: zero, 1: one, 2: two}
 
 # ask what the user wants and put it in a variable
 print('Please enter what you would like Ciphered:')
-translate = list(input('>>> ').upper())
+# loop to make sure input is only letters
+while True:
+    translate = input('>>> ').upper()
+    
+    if translate.isalpha():
+        break
+    
+    print('Sorry, this system doesn\'t (currently) support numerical digits. Try again please!')
 
 # main loop 1 that goes through each letter comparing the input to the library
 for i in range(len(translate)):
@@ -120,24 +153,12 @@ for i in range(len(translate)):
         # draws the node direction of the letters trinary
         directionLib[currentLetter[currentNode]](dist, coOrdsList[-1]['dir'])
 
-        # checks if current node is in the middle of a letter and adds var for tiny arrow
-        if currentNode != len(currentLetter) - 1:
-            coOrdsList[-1]['stamp'] = 2
+        # gives current node var for tiny arrow
+        coOrdsList[-1]['stamp'] = 2
 
-        # var initialized
-        overLapTest = 0
+        overlapTest()
 
-        # loop to check if any nodes are over lapping
-        for overLap in range(len(coOrdsList)-1):
-            # checks if x and y of current node is the same as any previous and changes var appropriately
-            if coOrdsList[-1]['x'] == coOrdsList[overLap]['x'] and coOrdsList[-1]['y'] == coOrdsList[overLap]['y']:
-                overLapTest = 1
-
-            # adds overlap var to node index
-            coOrdsList[-1]['over'] = overLapTest
-
-        # print the last added item in coOrdsList
-        print(coOrdsList[len(coOrdsList) - 1])
+        #overlapFix(dist)
     
     # checks if current node is at the end of a letter and adds var for large arrow
     if i != len(translate) - 1:
@@ -147,10 +168,9 @@ for i in range(len(translate)):
     if i == len(translate) - 1:
         coOrdsList[-1]['stamp'] = 1
 
-# print full coOrdsList
-print(coOrdsList)
+printCoOrds()
 
-#----------
+#--------------------
 
 # dictionary to actually call stamp funcs
 funcStamp = {'start': start, 'square': square, 'nodeNext': nodeNext, 'letterNext': letterNext}
